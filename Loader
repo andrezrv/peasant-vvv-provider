@@ -1,0 +1,54 @@
+# Loader
+# 
+# This file will load the settings specified in the configuration file and
+# prepare the running of all the tasks associated to those settings. This
+# includes the creation of provision-pre.sh and provision-post.sh, the auto
+# configuration of bash tasks, synchronization of shared folders, and fixes for
+# some problems that may appear on Windows based hosts systems and Ubuntu based
+# guest systems.
+
+# Change Encoding to Unicode
+#
+# Ruby may have problems parsing paths containing special characters, so many
+# load and require commands will fail. This little snippet seems to fix that
+# problem by changing the default encoding for command line to UTF-8.
+system("chcp 1252>nul")
+`chcp 65001`
+
+# No stdin/tty Error
+# 
+# Avoid "stdin: not a tty" error in Ubuntu 12.04. This may need to be something
+# different in other systems.
+config.ssh.shell = "bash -c \"BASH_ENV=/etc/profile exec bash\""
+
+# Execute Provision Maker
+# 
+# Load the Make file that will perform the auto configuration of bash
+# tasks and create the provision-pre.sh and provision-post.sh files needed in
+# order to perform those tasks. Provision will not run if Lockfile exists.
+if !File.exists?(File.join(host_dir,"","Lockfile")) then
+	eval(IO.read(File.join(host_dir,"","Make")), binding)
+end
+
+# Sync Folders
+# 
+# Add the folders specified in Config file to the list of the VM shared
+# folders, in case that the folders already exist.
+sync.each { |s| 
+	if File.directory?(File.join(vagrant_dir, s[0])) then
+		if vagrant_version >= "1.3.0"
+			config.vm.synced_folder s[0], s[1], :owner => s[2], :mount_options => [ s[3], s[4] ]
+		else
+			config.vm.synced_folder s[0], s[1], :owner => s[2], :extra => s[3] + "," + s[4]
+		end
+	end
+}
+
+# Add Hosts
+# 
+# Using the HostsUpdater plugin, add the domains specified in Config file to
+# the hosts file of the host system.
+if defined? VagrantPlugins::HostsUpdater
+	config.hostsupdater.remove_on_suspend = true # Remove hosts on "vagrant suspend"
+	config.hostsupdater.aliases = project_hosts # Define aliases
+end

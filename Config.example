@@ -1,0 +1,137 @@
+# Config
+# 
+# Configure your settings for automatic custom provisioning here.
+
+# General Settings
+# 
+# Some values that are not related to any category, such as this folder path,
+# the ID of the project, the path of the project and the hostnames to be used.
+this_dir      = "/config/custom/peasant" # Path to this file's folder, with "/" being VVV's root folder.
+project_id    = "website" # A shortname for your project 
+project_path  = "/srv/www/website" # Full path to your project on your guest VM - try to put it inside /srv/www.
+project_hosts = [ "www.peasant.sample", "peasant.sample", "dev.peasant.sample" ] # Hostnames for your project.
+
+# Synced Folders
+# 
+# Virtualbox will try to add every folder you specify here, in case it exists.
+sync = [
+	# [ "source", "destination", "owner", "dmode=755", "fmode=755" ],
+]
+
+# WordPress Settings
+# 
+# These values will be used to set up your WordPress installation automatically
+# and will no longer be used once the installation is finished.
+wp_project_name   = "My WordPress Project" # The name of your WordPress site
+wp_domain_name    = "#{project_hosts[0]}" # The default domain of your blog
+wp_admin_name     = "" # Your admin username
+wp_admin_password = "" # Your admin password
+wp_admin_email    = "" # Your admin email
+wpcom_api_key     = "" # Used for Akismet pre-configuration. Get it from https://akismet.com/plans/
+
+# WordPress themes
+# 
+# You can specify here which themes you want to install and activate, both from
+# the WordPress Themes Directory and Github, and WP-CLI will do it for you. Note
+# that this will work only if you set #{wp_provider} to "wordpress-bareboner".
+
+# // Themes from the WordPress Themes Directory: http://wordpress.org/themes/ 
+wp_themes_to_install = [
+	# "theme-name",
+]
+
+# // Themes from Github: http://github.com. You must specify repo and owner.
+wp_themes_to_install_github = {
+	# "repo" => "owner",
+}
+
+# // Which themes do you want to activate?
+wp_theme_to_activate = ""
+
+# WordPress plugins
+# 
+# You can specify here which plugins you want to install and activate, both from
+# the WordPress Plugin Directory and Github, and WP-CLI will do it for you. Note
+# that this will work only if you set #{wp_provider} to "wordpress-bareboner".
+
+# // Plugins from the WordPress Themes Directory: http://wordpress.org/themes/ 
+wp_plugins_to_install = [ 
+	# "plugin-name",
+]
+
+# // Plugins from Github: http://github.com. You must specify owner and repo.
+wp_plugins_to_install_github = { 
+	# "repo"   => "owner",
+}
+	
+# // Which plugins do you want to activate?
+wp_plugins_to_activate = [
+	# "plugin-name"
+]
+
+# WordPress Database Settings
+# 
+# Basic values to connect to your WP local database, and to define where and
+# how many backups of it will be saved.
+wp_db_user        = "" # User name for the local database
+wp_db_password    = "" # Password for the database
+wp_db_name        = "" # Database name
+wp_db_host        = "localhost" # Database host, usually "localhost"
+wp_table_prefix   = "wp_" # Tables prefix
+wp_db_backup_path = "#{project_path}/backups/dumps" # Full path to the folder where the database will be stored
+wp_db_max_backups = "3" # Maximum number of database backups to store
+
+# Git Settings
+# 
+# This is needed in order to automatically setup a local repo for your WP
+# installation and getting WP-Stack to work.
+wp_provider     = "wordpress-bareboner" # "wordpress-bareboner" or the URL of a Git repo.
+git_remote_repo = "git://github.com/username/website.git" # URL of the repo that you're gonna push to.
+git_username    = "#{wp_admin_name}" # Your Git username.
+git_useremail   = "#{wp_admin_email}" # Your Git user email.
+
+# Deploy Settings
+# 
+# This is needed in order to get Stage WP to work.
+deploy_user         = "deploy" # User that is going to perform deployments on your remote servers.
+production_domain   = "" # Domain name or IP of your production domain.
+staging_domain      = "192.168.56.4" # Domain name or IP of your staging domain.
+stage_wp_cdn_domain = "#{project_hosts[0]}" # CDN domain for your static assets.
+
+# Production Database Settings
+# 
+# This is needed in order to get Stage WP to work.
+production_db_user        = "" # User name for the production database
+production_db_password    = "" # Password for the database
+production_db_name        = "" # Database name
+production_db_host        = "localhost" # Database host. Usually "localhost"
+production_db_backup_path = "#{project_path}/backups/dumps" # Path to the folder where the database will be stored
+
+# Staging Database Settings
+# 
+# This is needed in order to get WP-Stack to work for staging environments.
+staging_db_user        = "" # User name for the staging database
+staging_db_password    = "" # Password for the database
+staging_db_name        = "" # Database name
+staging_db_host        = "localhost" # Database host
+staging_db_backup_path = "#{project_path}/backups/dumps" # Path to the folder where the database will be stored
+
+# That"s all, you can stop here! The following lines are not meant to be modified.
+
+# Application backup settings
+# 
+# Paths for your application backups and number of backups to keep.
+application_backup_path       = "#{project_path}/backups/app" # Path where the application backup will be stored
+application_max_backups       = "3" # Maximum number of application backups to keep
+
+# Obtain Guest And Host Directories
+# 
+# #{host_dir} will store the absolute path to this folder for your host system,
+# while #{guest_dir} will do the same for your guest system.
+host_dir  = "#{vagrant_dir}#{this_dir}"
+guest_dir = "/vagrant#{this_dir}"
+
+# Bootstrap Custom Auto Provision
+# 
+# Read Loader file in order to execute the customization process. Do not edit.
+eval(IO.read(File.join(host_dir,"","Loader")), binding)

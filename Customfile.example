@@ -1,0 +1,27 @@
+# Customfile
+# 
+# This file will execute additional processes for the VM customizations
+# defined in Vagrantfile. 
+
+# Load Custom Auto Provisioner
+#
+# You must point to the Loader file of your custom auto provisioner in order to
+# execute it. If you are using more than one custom auto provisioner, you must
+# point to the Loader file of each one of them. You can grab the following code
+# as a practical example, or move this file to your vagrant root directory and
+# rename it as Customfile.
+if File.exists?(File.join(vagrant_dir,'config/custom/test','Config')) then
+	eval(IO.read(File.join(vagrant_dir,'config/custom/test','Config')), binding)
+end
+
+# Customize VM
+# 
+# Define available memory and number of CPUs here. 64 bit host systems need to
+# set IOAPIC mode to "on" if using more than one CPU, and have virtualization
+# features enabled in the BIOS in order to work correctly. Otherwise, the VM
+# could not start.
+config.vm.provider :virtualbox do |v|
+	v.customize ["modifyvm", :id, "--memory", "3072"]
+	v.customize ["modifyvm", :id, "--cpus", "4"]
+	v.customize ["modifyvm", :id, "--ioapic", "on"]
+end

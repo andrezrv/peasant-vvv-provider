@@ -1,0 +1,114 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby 
+
+# Setup
+# 
+# This file will auto-configure the ./provision/config.sh file needed for bash
+# tasks to run correctly. It's a little messy, but I expect to make it better
+# over time as my Ruby coding abilities improve :P
+
+# Get Hosts
+#  
+# Get string of hosts from Ruby array to pass as a bash array to config.sh.
+hosts = ''
+project_hosts.each do |host|
+	hosts += "'#{host}' "
+end
+hosts = hosts.strip
+
+# Get WordPress plugins to install to pass as a bash array to config.sh.
+wp_plugins = ''
+wp_plugins_to_install.each do |plugin|
+	wp_plugins += "'#{plugin}' "
+end
+wp_plugins = wp_plugins.strip
+
+# Get WordPress plugins to install from Github to pass as a bash array to config.sh.
+wp_plugins_github = ''
+wp_plugins_to_install_github.each do |repo, owner|
+	wp_plugins_github += "['#{repo}']='#{owner}' "
+end
+wp_plugins_github = wp_plugins_github.strip
+
+# Get WordPress plugins to activate to pass as a bash array to config.sh.
+wp_plugins_activate = ''
+wp_plugins_to_activate.each do |plugin|
+	wp_plugins_activate += "'#{plugin}' "
+end
+wp_plugins_activate = wp_plugins_activate.strip
+
+# Get WordPress themes to install to pass as a bash array to config.sh.
+wp_themes = ''
+wp_themes_to_install.each do |theme|
+	wp_themes += "'#{theme}' "
+end
+wp_themes = wp_themes.strip
+
+# Get WordPress themes to install from Github to pass as a bash array to config.sh.
+wp_themes_github = ''
+wp_themes_to_install_github.each do |repo, owner|
+	wp_themes_github += "['#{repo}']='#{owner}' "
+end
+wp_themes_github = wp_themes_github.strip
+
+# Make Config
+# 
+# Create and write config.sh, by creating it from config.example.sh and
+# replacing the exaple values with the ones specified in the Config file.
+require "fileutils"
+config_file = "#{host_dir}/provision/config.sh"
+example_file = "#{host_dir}/provision/config.example.sh"
+FileUtils.cp(example_file, config_file)
+text = File.read(config_file)
+# Map replacements
+replacements = {
+	"%%PROJECT_ID%%"                   => project_id,
+	"%%PROJECT_PATH%%"                 => project_path,
+	"%%PROJECT_HOSTS%%"                => "(#{hosts})",
+	"%%WP_PROJECT_NAME%%"              => wp_project_name,
+	"%%WP_DOMAIN_NAME%%"               => wp_domain_name,
+	"%%WP_ADMIN_NAME%%"                => wp_admin_name,
+	"%%WP_ADMIN_PASSWORD%%"            => wp_admin_password,
+	"%%WP_ADMIN_EMAIL%%"               => wp_admin_email,
+	"%%WPCOM_API_KEY%%"                => wpcom_api_key,
+	"%%WP_DB_USER%%"                   => wp_db_user,
+	"%%WP_DB_PASSWORD%%"               => wp_db_password,
+	"%%WP_DB_NAME%%"                   => wp_db_name,
+	"%%WP_DB_HOST%%"                   => wp_db_host,
+	"%%WP_TABLE_PREFIX%%"              => wp_table_prefix,
+	"%%WP_DB_BACKUP_PATH%%"            => wp_db_backup_path,
+	"%%WP_DB_MAX_BACKUPS%%"            => wp_db_max_backups,
+	"%%WP_PROVIDER%%"                  => wp_provider,
+	"%%WP_THEMES_TO_INSTALL%%"         => "(#{wp_themes})",
+	"%%WP_THEMES_TO_INSTALL_GITHUB%%"  => "(#{wp_themes_github})",
+	"%%WP_THEME_TO_ACTIVATE%%"         => wp_theme_to_activate,
+	"%%WP_PLUGINS_TO_INSTALL%%"        => "(#{wp_plugins})",
+	"%%WP_PLUGINS_TO_INSTALL_GITHUB%%" => "(#{wp_plugins_github})",
+	"%%WP_PLUGINS_TO_ACTIVATE%%"       => "(#{wp_plugins_activate})",
+	"%%GIT_REMOTE_REPO%%"              => git_remote_repo,
+	"%%GIT_USERNAME%%"                 => git_username,
+	"%%GIT_USEREMAIL%%"                => git_username,
+	"%%DEPLOY_USER%%"                  => deploy_user,
+	"%%PRODUCTION_DOMAIN%%"            => production_domain,
+	"%%STAGING_DOMAIN%%"               => staging_domain,
+	"%%STAGE_WP_CDN_DOMAIN%%"          => stage_wp_cdn_domain,
+	"%%PRODUCTION_DB_USER%%"           => production_db_user,
+	"%%PRODUCTION_DB_PASSWORD%%"       => production_db_password,
+	"%%PRODUCTION_DB_NAME%%"           => production_db_name,
+	"%%PRODUCTION_DB_HOST%%"           => production_db_host,
+	"%%PRODUCTION_DB_BACKUP_PATH%%"    => production_db_backup_path,
+	"%%STAGING_DB_USER%%"              => staging_db_user,
+	"%%STAGING_DB_PASSWORD%%"          => staging_db_password,
+	"%%STAGING_DB_NAME%%"              => staging_db_name,
+	"%%STAGING_DB_HOST%%"              => staging_db_host,
+	"%%STAGING_DB_BACKUP_PATH%%"       => staging_db_backup_path,
+	"%%APPLICATION_BACKUP_PATH%%"      => application_backup_path,
+	"%%APPLICATION_MAX_BACKUPS%%"      => application_max_backups,
+}
+# Prepare commands to run.
+replace = ''
+replacements.each do |key, value| 
+	replace += "sed -i \"s|#{key}|#{value}|g\" #{guest_dir}/provision/config.sh; "
+end
+# Run commands.
+config.vm.provision "shell", inline: replace

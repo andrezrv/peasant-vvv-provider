@@ -1,0 +1,21 @@
+# Stuff that pops up locally for me - @andrezrv
+*.sublime*
+
+# No need to share config files
+/Config
+/provision/config.sh
+
+# No need to share our Lockfile
+/Lockfile
+
+# No need to share our custom hook files
+/provision/vvv-init-setup-plugins-pre.sh
+/provision/vvv-init-setup-plugins-post.sh
+/provision/vvv-init-setup-themes-pre.sh
+/provision/vvv-init-setup-themes-post.sh
+/provision/vvv-init-setup-tasks-custom.sh
+/provision/vvv-init-setup-deploy-custom.sh
+/provision/vvv-init-setup-nginx-custom.sh
+/provision/vvv-init-setup-plugins-custom.sh
+/provision/vvv-init-setup-themes-custom.sh
+/provision/vvv-init-setup-wordpress-custom.sh

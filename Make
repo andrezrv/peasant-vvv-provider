@@ -1,0 +1,42 @@
+# Make
+# 
+# This file will auto configure bash tasks and create the provision-pre.sh and
+# provision-post.sh files needed for those tasks to run correctly.
+
+# Setup Bash Configuration
+# 
+# Load the Setup file, which will create config.sh and auto configure settings
+# based on Config file.
+eval(IO.read(File.join(host_dir,"","Setup")), binding)
+
+# Create Pre-Provision File
+# 
+# Make a provision-pre.sh file into /vagrant/provision that will point to the
+# provision-pre.sh file included into the ./bash folder, in order to run the
+# custom auto provision tasks.
+provision_pre_text = "bash #{guest_dir}/provision/provision-pre.sh"
+provision_pre_file = "/vagrant/provision/provision-pre.sh"
+if File.exists?( provision_pre_file ) then
+	filesize = File.readlines(provision_pre_file).grep(/#{provision_pre_text}/).size
+	if (!(filesize>0)) then
+		config.vm.provision "shell", inline: "echo \"#{provision_pre_text}\" >> #{provision_pre_file}"
+	end
+else
+	config.vm.provision "shell", inline: "echo \"#{provision_pre_text}\" >> #{provision_pre_file}"
+end
+
+# Create Post-Provision File
+# 
+# Make a provision-post.sh file into /vagrant/provision that will point to the
+# provision-post.sh file included into the ./bash folder, in order to run the
+# custom auto provision tasks.
+provision_post_text = "bash #{guest_dir}/provision/provision-post.sh"
+provision_post_file = "/vagrant/provision/provision-post.sh"
+if File.exists?( provision_post_file ) then
+	filesize = File.readlines(provision_post_file).grep(/#{provision_post_text}/).size
+	if (!(filesize>0)) then
+		config.vm.provision "shell", inline: "echo \"#{provision_post_text}\" >> #{provision_post_file}"
+	end
+else
+	config.vm.provision "shell", inline: "echo \"#{provision_post_text}\" >> #{provision_post_file}"
+end

@@ -41,13 +41,13 @@ If you want to add or replace functionality, you can do it by creating the follo
 * `vvv-init-setup-tasks-custom.sh`: For custom configuration of backups and maintenance tasks. 
 * `vvv-init-setup-wordpress-custom.sh`: For custom configuration of your WordPress site.
 * `vvv-init-setup-themes-custom.sh`: For custom installation and activation of themes.
-* `vvv-init-setup-plugins-custom.sh`: For custom installation and activatino of plugins.
+* `vvv-init-setup-plugins-custom.sh`: For custom installation and activation of plugins.
 * `vvv-init-setup-deploy-custom.sh`: For custom configuration of your deployment system.
 * `vvv-init-setup-nginx-custom.sh`: For custom configuration of your project's NGINX server block.
 * `vvv-init-setup-themes-pre.sh`: For all the tasks you need to run before installing themes. 
-* `vvv-init-setup-themes-post.sh`: For all the tasks you need to run before installing themes.
+* `vvv-init-setup-themes-post.sh`: For all the tasks you need to run after installing themes.
 * `vvv-init-setup-plugins-pre.sh`: For all the tasks you need to run before installing plugins. 
-* `vvv-init-setup-plugins-post.sh`: For all the tasks you need to run before installing plugins. 
+* `vvv-init-setup-plugins-post.sh`: For all the tasks you need to run after installing plugins. 
 
 ## How Do I Prevent Peasant From Running Every Effing Time?
 
@@ -66,5 +66,5 @@ If you feel like you want to help this project by adding something you think use
 [vvv]: http://github.com/Varying-Vagrant-Vagrants/VVV
 [wpbb]: http://github.com/andrezrv/wordpress-bareboner
 [stagewp]: http://github.com/andrezrv/stage-wp
-[cap]: https://github.com/capistrano/capistrano
+[cap]: http://github.com/capistrano/capistrano
 [rubygems]: http://rubygems.org/pages/download

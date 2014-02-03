@@ -1,6 +1,6 @@
 # Peasant VVV Provider
 
-Peasant provides your [VVV][vvv] virtual machine with a preinstalled WordPress website (including your prefered themes and plugins) based on [WordPress Bareboner][wpbb] and an already configured instance of [Stage WP][stagewp] for your deployments. Just clone the repo, set up your custom file, run `vagrant up` into your VVV folder, and you're done!
+Peasant provides your [VVV][vvv] virtual machine with a preinstalled WordPress website (including your prefered themes and plugins) based on [WordPress Bareboner][wpbb] and an already configured instance of [Stage WP][stagewp] for your deployments. Just clone the repo, set up your configuration files, run `vagrant up` into your VVV folder, and you're done!
 
 ## Features
 

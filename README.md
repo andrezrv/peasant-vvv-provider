@@ -23,7 +23,7 @@ That's pretty much it :)
 1. `cd` to your VVV folder.
 2. Clone Peasant: `git clone git://github.com:andrezrv/peasant-vvv-provider $vagrant_dir/config/custom/peasant`.
 3. Go to `$vagrant_dir/config/custom/peasant`, copy `Config.example` to `Config`, and configure it as you need.
-4. Copy `Customfile.example` to your VVV root, and modify it as necessary so it can read `$vagrant_dir/ebconfig/custom/peasant`, or just modify your current `Customfile`.
+4. Copy `Customfile.example` to your VVV root, and modify it as necessary so it can read `$vagrant_dir/config/custom/peasant`, or just modify your current `Customfile`.
 5. Run `vagrant up`. In some cases you should need to run `vagrant up --provision` to be sure the entire process is executed.
 
 Once the provision ended, you should have your WordPress website and your Stage WP instance into the folder of your new web project. Also, you should find your new hosts inside `/etc/hosts` and your NGINX file into `$project_path/vvv-conf/vvv-nginx.conf`.
